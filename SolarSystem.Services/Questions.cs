@@ -68,6 +68,38 @@ namespace SolarSystem.Services
             return amountOfMoons / _Db.GetAllItemsOfTypePlanet().Count;
         }
 
+        public (double avgPlanet, double avgDwarfPlanet) Question11()
+        {
+            double totalPlanetTemp = 0;
+            byte totalPlanets = 0;
+            double totalDwarfPlanetTemp = 0;
+            byte totalDwarfPlanets = 0;
+
+            foreach (var item in _Db.GetAllItemsOfTypePlanet())
+            {
+                switch (item.Class)
+                {
+                    case Core.Models.Planet.TypeOfPlanet.Planet:
+                        totalPlanets++;
+                        totalPlanetTemp += item.SurfaceTempMax;
+                        totalPlanetTemp += item.SurfaceTempMin;
+                        break;
+                    case Core.Models.Planet.TypeOfPlanet.DwarfPlanet:
+                        totalDwarfPlanets++;
+                        totalDwarfPlanetTemp += item.SurfaceTempMax;
+                        totalDwarfPlanetTemp += item.SurfaceTempMin;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            totalPlanetTemp /= 2;
+            totalDwarfPlanetTemp /= 2;
+
+            return (totalPlanetTemp / totalPlanets, totalDwarfPlanetTemp / totalDwarfPlanets);
+        }
+
         public int Question12()
         {
             short amountOfMoons = 0;
@@ -77,6 +109,27 @@ namespace SolarSystem.Services
             }
 
             return amountOfMoons + _Db.GetAllItemsOfTypePlanet().Count + _Db.GetAllItemsOfTypeStar().Count;
+        }
+
+        public (string planet1,string planet2) Question13()
+        {
+            string planet1 = default(string);
+            string planet2 = default(string);
+            long shortestDistance = int.MaxValue;
+            foreach (var item in _Db.GetAllItemsOfTypePlanet())
+            {
+                foreach (var item2 in _Db.GetAllItemsOfTypePlanet())
+                {
+                    if (item.OrbitDistance - item2.OrbitDistance < shortestDistance)
+                    {
+                        planet1 = item.Name;
+                        planet2 = item2.Name;
+                        shortestDistance = item.OrbitDistance - item2.OrbitDistance;
+                    }
+                }
+            }
+
+            return (planet1, planet2);
         }
     }
 }

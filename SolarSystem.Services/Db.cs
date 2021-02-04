@@ -16,15 +16,11 @@ namespace SolarSystem.Services
     public class Db : IDb
     {
         private readonly ApplicationDbContext _context;
-        private string _connectionString = "Server=(localdb)\\mssqllocaldb;Database=database;Trusted_Connection=True;MultipleActiveResultSets=true";
 
-        public Db()
+        public Db(ApplicationDbContext context)
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseSqlServer(_connectionString).Options;
-            // With the options generated above, we can then just construct a new DbContext class
-
-                _context = new ApplicationDbContext(options);
-        }**
+            _context = context;
+        }
 
         public List<Planet> GetAllItemsOfTypePlanet()
         {

@@ -9,8 +9,7 @@ namespace SolarSystem.Core.Models
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : base(options)
+        public ApplicationDbContext()
         {
         }
         public DbSet<Planet> Planets { get; set; }
@@ -18,14 +17,10 @@ namespace SolarSystem.Core.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.EnableSensitiveDataLogging();
             if (!optionsBuilder.IsConfigured)
             {
-                IConfigurationRoot configuration = new ConfigurationBuilder()
-                   .SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile("appsettings.json")
-                   .Build();
-                var connectionString = configuration.GetConnectionString("defaultConnection");
-                optionsBuilder.UseSqlServer(connectionString);
+                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=SolarSystem; Trusted_Connection=True; MultipleActiveResultSets=true");
             }
         }
 
