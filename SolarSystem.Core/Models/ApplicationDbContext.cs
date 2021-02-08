@@ -1,29 +1,26 @@
-﻿using System.IO;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace SolarSystem.Core.Models
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    : base(options)
+        public ApplicationDbContext()
         {
         }
-
         public DbSet<Planet> Planets { get; set; }
         public DbSet<Star> Stars { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            optionsBuilder.EnableSensitiveDataLogging();
             if (!optionsBuilder.IsConfigured)
             {
-                IConfigurationRoot configuration = new ConfigurationBuilder()
-                   .SetBasePath(Directory.GetCurrentDirectory())
-                   .AddJsonFile("appsettings.json")
-                   .Build();
-                var connectionString = configuration.GetConnectionString("defaultConnection");
-                optionsBuilder.UseSqlServer(connectionString);
+                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=SolarSystem; Trusted_Connection=True; MultipleActiveResultSets=true");
             }
         }
 
