@@ -6,7 +6,8 @@ namespace SolarSystem.Core.Models
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext()
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : base(options)
         {
         }
 
@@ -15,10 +16,14 @@ namespace SolarSystem.Core.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.EnableSensitiveDataLogging();
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb; Database=SolarSystem; Trusted_Connection=True; MultipleActiveResultSets=true");
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json")
+                   .Build();
+                var connectionString = configuration.GetConnectionString("defaultConnection");
+                optionsBuilder.UseSqlServer(connectionString);
             }
         }
 
