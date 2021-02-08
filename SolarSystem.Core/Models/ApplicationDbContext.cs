@@ -9,9 +9,6 @@ namespace SolarSystem.Core.Models
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext()
-        {
-        }
         public DbSet<Planet> Planets { get; set; }
         public DbSet<Star> Stars { get; set; }
 

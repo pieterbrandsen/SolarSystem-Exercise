@@ -6,9 +6,8 @@ using System.Text;
 namespace SolarSystem.Core.Models
 {
     public abstract class Object {
-        public string Name { get; set; }
         public int Id { get; set; }
-
+        public string Name { get; set; }
         public uint Diameter { get; set; }
         public double SurfaceTempMax { get; set; }
         public double SurfaceTempMin { get; set; }
